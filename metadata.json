@@ -4,5 +4,5 @@
   "itemDisplayName": "Provision the necessary ressources for the deployment of Botcore into Azure",
   "description": "This template provisions an App service plan, Function app, Storage account, Redis cache, Server, SQL DatabaseProvisions App service plan, Web app, SQL database, Storage account& Redis cache.",
   "githubUsername": "AcuvateSoftware",
-  "dateUpdated": "November-6, 2018"
+  "dateUpdated": "November-8, 2018"
 }
