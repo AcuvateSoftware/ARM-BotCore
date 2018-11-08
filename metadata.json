@@ -2,7 +2,7 @@
   "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
   "type": "Botcore deployment",
   "itemDisplayName": "Provision the necessary ressources for the deployment of Botcore into Azure",
-  "description": "This template provisions an App service plan, Function app, Storage account, Redis cache, Server, SQL DatabaseProvisions App service plan, Web app, SQL database, Storage account& Redis cache.",
+  "description": "This template provisions an App service plan, Function app, Storage account, Redis cache, Server, SQL DatabaseProvisions App service plan, Web app, SQL database, Storage account& Redis cache for BotCore deployment.",
   "githubUsername": "AcuvateSoftware",
   "dateUpdated": "November-8, 2018"
 }
