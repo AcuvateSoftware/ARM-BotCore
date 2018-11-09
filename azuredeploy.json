@@ -108,6 +108,7 @@
     "Bot-operational-server Name ": {
       "type": "string",
       "minLength": 1,
+      "pattern": "[a-z][0-9]",
       "metadata": {
         "description": "Please enter the name of server."
       }
