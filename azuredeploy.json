@@ -2,16 +2,16 @@
   "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
   "contentVersion": "1.0.0.0",
   "parameters": {
-    "App Service Plan Name": {
+    "BotCore App Service Plan": {
       "type": "string",
       "minLength": 1,
       "metadata": {
-        "description": "Please enter the name of App service plan."
+        "description": "Please enter the name of app service plan that will host the BotCore Runtime & Admin Service."
       }
     },
-    "App Service Plan Sku": {
+    "BotCore App Service Plan SKU": {
       "type": "string",
-      "defaultValue": "F1",
+      "defaultValue": "B2",
       "allowedValues": [
         "F1",
         "D1",
@@ -27,16 +27,23 @@
         "P4"
       ],
       "metadata": {
-        "description": "Describes plan's pricing tier and capacity. Check details at https://azure.microsoft.com/en-us/pricing/details/app-service/"
+        "description": "Select the type of the App Service plan"
       }
     },
-    "Web App Name": {
+    "BotCore Runtime Web App": {
       "type": "string",
-      "metadata": {"description": "Please enter the name of Web App here."}
+      "defaultValue": "ACU-BOT-ABS-DEV",
+      "metadata": { "description": "Name of BotCore runtime Web App. This will be used while creating the Azure Bot Service." }
     },
-    "Storage Name": {
+    "BotCore Admin Service Web App": {
       "type": "string",
-      "metadata": { "description": "Please enter the name of Storage account." }
+      "defaultValue": "ACU-BOT-ABS-DEV",
+      "metadata": { "description": "Name of BotCore runtime Web App. This will be used while creating the Azure Bot Service." }
+    },
+    "Storage": {
+      "type": "string",
+      "defaultValue": "acubotstoragedev",
+      "metadata": { "description": "Please enter the name of Storage account (only lower case alphabets and numbers). This will be used while creating the Azure Bot Service." }
     },
     "Storage Type": {
       "type": "string",
@@ -49,26 +56,15 @@
         "Premium_LRS"
       ],
       "metadata": {
-        "description": "Describes the type of the storage. Name should contain only lower case alphabets and numbers."
+        "description": "Select the type of the storage"
       }
     },
-    "Redis Cache Name": {
+    "Redis Cache": {
       "type": "string",
       "minLength": 1,
+      "defaultValue": "ACU-BOT-RC-DEV",
       "metadata": {
-        "description": "Please enter the name of Redis Cache."
-      }
-    },
-    "Redis Cache SKU Name": {
-      "type": "string",
-      "allowedValues": [
-        "Basic",
-        "Standard",
-        "Premium"
-      ],
-      "defaultValue": "Standard",
-      "metadata": {
-        "description": "Describes plan's pricing tier and capacity."
+        "description": "Please enter the name of Redis Cache that will be used by BotCore for short term memory."
       }
     },
     "Redis Cache SKU Family": {
@@ -77,8 +73,21 @@
         "C",
         "P"
       ],
+      "defaultValue": "C",
       "metadata": {
-        "description": "The SKU family to use. (C = Basic/Standard, P = Premium)"
+        "description": "Select the type of the cache family (C = Basic/Standard, P = Premium)"
+      }
+    },
+    "Redis Cache SKU": {
+      "type": "string",
+      "allowedValues": [
+        "Basic",
+        "Standard",
+        "Premium"
+      ],
+      "defaultValue": "Basic",
+      "metadata": {
+        "description": "Select the type of the cache."
       }
     },
     "Redis Cache SKU Capacity": {
@@ -101,51 +110,58 @@
       "allowedValues": [
         "2.8"
       ],
+      "defaultValue": "2.8",
       "metadata": {
-        "description": "Describes version of Redis Cache."
+        "description": "Version of Redis Cache."
       }
     },
-    "Bot-operational-server Name ": {
+    "BotCore DB Server": {
       "type": "string",
       "minLength": 1,
-      "pattern": "[a-z][0-9]",
+      "defaultValue": "acubotsqlserverdev",
       "metadata": {
-        "description": "Please enter the name of server."
+        "description": "Please enter the name of the database server for BotCore Operational DB."
       }
     },
-    "Bot-operational-server username": {
+    "DB Server Username": {
       "type": "string",
       "minLength": 1,
+      "defaultValue": "acubotdbadmin",
       "metadata": {
-        "description": "Please enter the login id for server."
+        "description": "Please enter the admin login id for DB Server."
       }
     },
-    "Bot-operational-server password": {
+    "DB Server Password": {
       "type": "securestring",
       "metadata": {
-        "description": "Please enter the password for server."
+        "description": "Please enter the admin password for DB Server."
       }
     },
-    "SQL Database Name": {
+    "BotCore Operational DB": {
       "type": "string",
       "minLength": 1,
+      "defaultValue": "ACU-BOT-SQL-DEV",
       "metadata": {
-        "description": "Please enter the name of SQL Database."
+        "description": "Please enter the name for the BotCore Operational Database."
       }
     },
     "SQL Database Collation": {
+      "readOnly": "true",
       "type": "string",
       "minLength": 1,
       "defaultValue": "SQL_Latin1_General_CP1_CI_AS"
     },
-    "SQL Database Edition": {
+    "BotCore Operational DB Edition": {
       "type": "string",
       "defaultValue": "Basic",
       "allowedValues": [
         "Basic",
         "Standard",
         "Premium"
-      ]
+      ],
+      "metadata": {
+        "description": "Select the type of the DB edition."
+      }
     },
     "SQL Database Requested SOM": {
       "type": "string",
@@ -160,31 +176,31 @@
         "P3"
       ],
       "metadata": {
-        "description": "Describes the performance level for edition"
+        "description": "Select the plan for the DB based on the Edition (Basic = Basic | Standard = S0,S1,S2 | Premium = P1,P2,P3)."
       }
     }
   },
   "variables": {},
   "resources": [
     {
-      "name": "[parameters('App Service Plan Name')]",
+      "name": "[parameters('BotCore App Service Plan')]",
       "type": "Microsoft.Web/serverfarms",
       "location": "[resourceGroup().location]",
       "apiVersion": "2015-08-01",
       "sku": {
-        "name": "[parameters('App Service Plan Sku')]"
+        "name": "[parameters('BotCore App Service Plan SKU')]"
       },
       "dependsOn": [],
       "tags": {
         "displayName": "App Service Plan"
       },
       "properties": {
-        "name": "[parameters('App Service Plan Name')]",
+        "name": "[parameters('BotCore App Service Plan')]",
         "numberOfWorkers": 1
       }
     },
     {
-      "name": "[parameters('Storage Name')]",
+      "name": "[parameters('Storage')]",
       "type": "Microsoft.Storage/storageAccounts",
       "location": "[resourceGroup().location]",
       "apiVersion": "2016-01-01",
@@ -198,7 +214,7 @@
       "kind": "Storage"
     },
     {
-      "name": "[parameters('Redis Cache Name')]",
+      "name": "[parameters('Redis Cache')]",
       "type": "Microsoft.Cache/Redis",
       "location": "[resourceGroup().location]",
       "apiVersion": "2016-04-01",
@@ -208,7 +224,7 @@
       },
       "properties": {
         "sku": {
-          "name": "[parameters('Redis Cache SKU Name')]",
+          "name": "[parameters('Redis Cache SKU')]",
           "family": "[parameters('Redis Cache SKU Family')]",
           "capacity": "[parameters('Redis Cache SKU Capacity')]"
         },
@@ -216,7 +232,7 @@
       }
     },
     {
-      "name": "[parameters('bot-operational-server Name ')]",
+      "name": "[parameters('BotCore DB Server')]",
       "type": "Microsoft.Sql/servers",
       "location": "[resourceGroup().location]",
       "apiVersion": "2014-04-01-preview",
@@ -225,8 +241,8 @@
         "displayName": "bot-operational-server"
       },
       "properties": {
-        "administratorLogin": "[parameters('bot-operational-server username')]",
-        "administratorLoginPassword": "[parameters('bot-operational-server password')]"
+        "administratorLogin": "[parameters('DB Server Username')]",
+        "administratorLoginPassword": "[parameters('DB Server Password')]"
       },
       "resources": [
         {
@@ -235,7 +251,7 @@
           "location": "[resourceGroup().location]",
           "apiVersion": "2014-04-01-preview",
           "dependsOn": [
-            "[resourceId('Microsoft.Sql/servers', parameters('bot-operational-server Name '))]"
+            "[resourceId('Microsoft.Sql/servers', parameters('BotCore DB Server'))]"
           ],
           "properties": {
             "startIpAddress": "0.0.0.0",
@@ -243,19 +259,19 @@
           }
         },
         {
-          "name": "[parameters('SQL Database Name')]",
+          "name": "[parameters('BotCore Operational DB')]",
           "type": "databases",
           "location": "[resourceGroup().location]",
           "apiVersion": "2014-04-01-preview",
           "dependsOn": [
-            "[resourceId('Microsoft.Sql/servers', parameters('bot-operational-server Name '))]"
+            "[resourceId('Microsoft.Sql/servers', parameters('BotCore DB Server'))]"
           ],
           "tags": {
             "displayName": "SQL Database"
           },
           "properties": {
             "collation": "[parameters('SQL Database Collation')]",
-            "edition": "[parameters('SQL Database Edition')]",
+            "edition": "[parameters('BotCore Operational DB Edition')]",
             "maxSizeBytes": "1073741824",
             "requestedServiceObjectiveName": "[parameters('SQL Database Requested SOM')]"
           }
@@ -263,20 +279,37 @@
       ]
     },
     {
-      "name": "[parameters('Web App Name')]",
+      "name": "[parameters('BotCore Runtime Web App')]",
       "type": "Microsoft.Web/sites",
       "location": "[resourceGroup().location]",
       "apiVersion": "2015-08-01",
       "dependsOn": [
-        "[resourceId('Microsoft.Web/serverfarms', parameters('App Service Plan Name'))]"
+        "[resourceId('Microsoft.Web/serverfarms', parameters('BotCore App Service Plan'))]"
       ],
       "tags": {
-        "[concat('hidden-related:', resourceId('Microsoft.Web/serverfarms', parameters('App Service Plan Name')))]": "Resource",
+        "[concat('hidden-related:', resourceId('Microsoft.Web/serverfarms', parameters('BotCore App Service Plan')))]": "Resource",
         "displayName": "Web App"
       },
       "properties": {
-        "name": "[parameters('Web App Name')]",
-        "serverFarmId": "[resourceId('Microsoft.Web/serverfarms', parameters('App Service Plan Name'))]"
+        "name": "[parameters('BotCore Runtime Web App')]",
+        "serverFarmId": "[resourceId('Microsoft.Web/serverfarms', parameters('BotCore App Service Plan'))]"
+      }
+    },
+    {
+      "name": "[parameters('BotCore Admin Service Web App')]",
+      "type": "Microsoft.Web/sites",
+      "location": "[resourceGroup().location]",
+      "apiVersion": "2015-08-01",
+      "dependsOn": [
+        "[resourceId('Microsoft.Web/serverfarms', parameters('BotCore App Service Plan'))]"
+      ],
+      "tags": {
+        "[concat('hidden-related:', resourceId('Microsoft.Web/serverfarms', parameters('BotCore App Service Plan')))]": "Resource",
+        "displayName": "Web App"
+      },
+      "properties": {
+        "name": "[parameters('BotCore Runtime Web App')]",
+        "serverFarmId": "[resourceId('Microsoft.Web/serverfarms', parameters('BotCore App Service Plan'))]"
       }
     },
     {
