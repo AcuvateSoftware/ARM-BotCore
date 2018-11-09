@@ -146,7 +146,6 @@
       }
     },
     "SQL Database Collation": {
-      "readOnly": "true",
       "type": "string",
       "minLength": 1,
       "defaultValue": "SQL_Latin1_General_CP1_CI_AS"
