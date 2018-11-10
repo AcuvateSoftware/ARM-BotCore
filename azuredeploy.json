@@ -204,9 +204,13 @@
     "DF Version": {
       "type": "string",
       "allowedValues": [
-        "V1",
-        "V2",
-        "V2 with data flow(preview)"
+        "2015-10-01",
+        "2015-09-01",
+        "2015-08-01",
+        "2015-07-01-preview",
+        "2015-05-01-preview",
+        "2014-10-01-preview",
+        "2014-04-01"
       ],
         "metadata":
         { "description": "Bot operational Data Factory version." }
