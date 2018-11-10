@@ -177,14 +177,37 @@
       "metadata": {
         "description": "Select the plan for the DB based on the Edition (Basic = Basic | Standard = S0,S1,S2 | Premium = P1,P2,P3)."
       }
+    },
+    "BotCore operational Data Factory": {
+      "type": "string",
+      "metadata": {
+        "description": "Please enter the name of Data Factory that will be used by BotCore to create, schedule and manage your data integration at scale."
+      }
+    },
+    "DF location": {
+      "type": "string",
+      "allowedValues": [
+        "East US",
+        "East US 2",
+        "North Europe",
+        "Southeast Asia",
+        "UK South",
+        "West Central US",
+        "West Europe",
+        "West US",
+        "West US 2"
+      ],
+      "metadata": {
+        "description": "Select the location for the BotCore operational Data Factory"
+      }
+    },
+    "DF Version": {
+      "type": "string",
+      "defaultValue": "2015-01-01-preview",
+      "metadata": {"description": "Bot operational Data Factory version."}
     }
   },
-  "variables": {
-    "SKUBasicAllowedValues": [ "Basic" ],
-    "SKUStandardAllowedValues": [ "S0", "S1", "S2" ],
-    "SKUPremiumAllowedValues": ["P1", "P2", "P3"]
-
-  },
+  "variables": {},
   "resources": [
     {
       "name": "[parameters('BotCore App Service Plan')]",
@@ -230,7 +253,7 @@
         "sku": {
           "name": "[parameters('Redis Cache SKU')]",
           "family": "[parameters('Redis Cache SKU Family')]",
-          "capacity": "[parameters('Redis Cache SKU Capacity')]",
+          "capacity": "[parameters('Redis Cache SKU Capacity')]"
         },
         "redisVersion": "[parameters('Redis Cache Redis Version')]"
       }
@@ -277,12 +300,7 @@
             "collation": "[parameters('SQL Database Collation')]",
             "edition": "[parameters('BotCore Operational DB Edition')]",
             "maxSizeBytes": "1073741824",
-            "requestedServiceObjectiveName": [
-              "[if(equals(parameters('BotCore Operational DB Edition'), 'Basic'), parameters('SQL Database Requested SOM'),variables('SKUBasicAllowedValues'))]",
-              "[if(equals(parameters('BotCore Operational DB Edition'), 'Standard'), parameters('SQL Database Requested SOM'),variables('SKUStandardAllowedValues'))]",
-              "[if(equals(parameters('BotCore Operational DB Edition'), 'Premium'), parameters('SQL Database Requested SOM'),variables('SKUPremiumAllowedValues'))]"
-
-            ]
+            "requestedServiceObjectiveName": "[parameters('SQL Database Requested SOM')]"
           }
         }
       ]
@@ -315,11 +333,18 @@
       "tags": {
         "[concat('hidden-related:', resourceId('Microsoft.Web/serverfarms', parameters('BotCore App Service Plan')))]": "Resource",
         "displayName": "Web App"
-      },  
+      },
       "properties": {
         "name": "[parameters('BotCore Admin Service Web App')]",
         "serverFarmId": "[resourceId('Microsoft.Web/serverfarms', parameters('BotCore App Service Plan'))]"
       }
+    },
+    {
+      "apiVersion": "[parameters('DF Version')]",
+      "name": "[parameters('BotCore operational Data Factory')]",
+      "location": "[parameters('DF location')]",
+      "type": "Microsoft.DataFactory/dataFactories",
+      "properties": {}
     },
     {
       "apiVersion": "2018-02-01",
