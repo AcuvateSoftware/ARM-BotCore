@@ -384,7 +384,49 @@
       "tags": {
         "displayName": "Storage"
       },
-      "kind": "Storage"
+      "kind": "Storage",
+      "resources": [
+        {
+          "apiVersion": "2016-03-01",
+          "name": "[parameters('Function app- Name')]",
+          "type": "Microsoft.Web/sites",
+          "properties": {
+            "name": "[parameters('Function app- Name')]",
+            "siteConfig": {
+              "appSettings": [
+                {
+                  "name": "FUNCTIONS_WORKER_RUNTIME",
+                  "value": "dotnet"
+                },
+                {
+                  "name": "AzureWebJobsStorage",
+                  "value": "[concat('DefaultEndpointsProtocol=https;AccountName=',parameters('Storage account- Name'),';AccountKey=',listKeys(resourceId(parameters('Subscription id'),parameters('Resource group- Name'),'Microsoft.Storage/storageAccounts', parameters('Storage account- Name')), '2015-05-01-preview').key1)]"
+                },
+                {
+                  "name": "FUNCTIONS_EXTENSION_VERSION",
+                  "value": "~2"
+                },
+                {
+                  "name": "WEBSITE_CONTENTAZUREFILECONNECTIONSTRING",
+                  "value": "[concat('DefaultEndpointsProtocol=https;AccountName=',parameters('Storage account- Name'),';AccountKey=',listKeys(resourceId(parameters('Subscription id'),parameters('Resource group- Name'),'Microsoft.Storage/storageAccounts', parameters('Storage account- Name')), '2015-05-01-preview').key1)]"
+                },
+                {
+                  "name": "WEBSITE_CONTENTSHARE",
+                  "value": "[concat(toLower(parameters('Storage account- Name')), '8875')]"
+                },
+                {
+                  "name": "WEBSITE_NODE_DEFAULT_VERSION",
+                  "value": "8.11.1"
+                }
+              ]
+            },
+            "clientAffinityEnabled": false,
+            "reserved": false
+          },
+          "location": "[parameters('Function app- Location')]",
+          "kind": "functionapp"
+        }
+      ]
     },
     {
       "name": "[parameters('Redis Cache')]",
@@ -588,46 +630,6 @@
         "name": "[parameters('Cognitive service- Sku')]"
       },
       "properties": {}
-    },
-    {
-      "apiVersion": "2016-03-01",
-      "name": "[parameters('Function app- Name')]",
-      "type": "Microsoft.Web/sites",
-      "properties": {
-        "name": "[parameters('Function app- Name')]",
-        "siteConfig": {
-          "appSettings": [
-            {
-              "name": "FUNCTIONS_WORKER_RUNTIME",
-              "value": "dotnet"
-            },
-            {
-              "name": "AzureWebJobsStorage",
-              "value": "[concat('DefaultEndpointsProtocol=https;AccountName=',parameters('Storage account- Name'),';AccountKey=',listKeys(resourceId(parameters('Subscription id'),parameters('Resource group- Name'),'Microsoft.Storage/storageAccounts', parameters('Storage account- Name')), '2015-05-01-preview').key1)]"
-            },
-            {
-              "name": "FUNCTIONS_EXTENSION_VERSION",
-              "value": "~2"
-            },
-            {
-              "name": "WEBSITE_CONTENTAZUREFILECONNECTIONSTRING",
-              "value": "[concat('DefaultEndpointsProtocol=https;AccountName=',parameters('Storage account- Name'),';AccountKey=',listKeys(resourceId(parameters('Subscription id'),parameters('Resource group- Name'),'Microsoft.Storage/storageAccounts', parameters('Storage account- Name')), '2015-05-01-preview').key1)]"
-            },
-            {
-              "name": "WEBSITE_CONTENTSHARE",
-              "value": "[concat(toLower(parameters('Storage account- Name')), '8875')]"
-            },
-            {
-              "name": "WEBSITE_NODE_DEFAULT_VERSION",
-              "value": "8.11.1"
-            }
-          ]
-        },
-        "clientAffinityEnabled": false,
-        "reserved": false
-      },
-      "location": "[parameters('Function app- Location')]",
-      "kind": "functionapp"
     },
     {
       "apiVersion": "2018-02-01",
