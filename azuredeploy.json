@@ -270,7 +270,6 @@
           "dependsOn": [
             "[resourceId('Microsoft.Sql/servers', parameters('BotCore DB Server'))]"
           ],
-          //"condition": "[if(equals(parameters('BotCore Operational DB Edition'), 'Basic'), parameters('SQL Database Requested SOM'),variables('SKUBasicAllowedValues'))]",
           "tags": {
             "displayName": "SQL Database"
           },
