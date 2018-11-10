@@ -203,8 +203,13 @@
     },
     "DF Version": {
       "type": "string",
-      "defaultValue": "2015-01-01-preview",
-      "metadata": {"description": "Bot operational Data Factory version."}
+      "allowedValues": [
+        "V1",
+        "V2",
+        "V2 with data flow(preview)"
+      ],
+        "metadata":
+        { "description": "Bot operational Data Factory version." }
     }
   },
   "variables": {},
