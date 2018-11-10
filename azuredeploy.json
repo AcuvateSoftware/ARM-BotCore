@@ -111,6 +111,7 @@
         "2.8"
       ],
       "defaultValue": "2.8",
+       "readOnly": "true",
       "metadata": {
         "description": "Version of Redis Cache."
       }
