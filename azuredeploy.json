@@ -38,7 +38,7 @@
     "BotCore Admin Service Web App": {
       "type": "string",
       "defaultValue": "ACU-BOT-ABS-DEV",
-      "metadata": { "description": "Name of BotCore runtime Web App. This will be used while creating the Azure Bot Service." }
+      "metadata": { "description": "Name of BotCore admin service Web App." }
     },
     "Storage": {
       "type": "string",
