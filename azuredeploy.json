@@ -180,6 +180,7 @@
     },
     "BotCore operational Data Factory": {
       "type": "string",
+      "defaultValue": "ACU-BOT-ADF-Dev",
       "metadata": {
         "description": "Please enter the name of Data Factory that will be used by BotCore to create, schedule and manage your data integration at scale."
       }
