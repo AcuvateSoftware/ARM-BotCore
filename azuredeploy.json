@@ -37,7 +37,7 @@
     },
     "BotCore Admin Service Web App": {
       "type": "string",
-      "defaultValue": "ACU-BOT-ABS-DEV",
+      "defaultValue": "ACU-BOT-APP-DEV",
       "metadata": { "description": "Name of BotCore admin service Web App." }
     },
     "Storage": {
