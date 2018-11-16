@@ -185,7 +185,7 @@
         "description": "Please enter the name of Data Factory that will be used by BotCore to create, schedule and manage your data integration at scale."
       }
     },
-    "DF location": {
+    "Data Factory location": {
       "type": "string",
       "allowedValues": [
         "East US",
@@ -202,7 +202,7 @@
         "description": "Select the location for the BotCore operational Data Factory"
       }
     },
-    "DF Version": {
+    "Data Factory Version": {
       "type": "string",
       "allowedValues": [
         "2015-10-01",
@@ -213,8 +213,7 @@
         "2014-10-01-preview",
         "2014-04-01"
       ],
-        "metadata":
-        { "description": "Bot operational Data Factory version." }
+      "metadata": { "description": "Bot operational Data Factory version." }
     }
   },
   "variables": {},
@@ -350,9 +349,9 @@
       }
     },
     {
-      "apiVersion": "[parameters('DF Version')]",
+      "apiVersion": "[parameters('Data Factory Version')]",
       "name": "[parameters('BotCore operational Data Factory')]",
-      "location": "[parameters('DF location')]",
+      "location": "[parameters('Data Factory location')]",
       "type": "Microsoft.DataFactory/dataFactories",
       "properties": {}
     },
