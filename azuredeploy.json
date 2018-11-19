@@ -198,6 +198,7 @@
         "West US",
         "West US 2"
       ],
+      "defaultValue": "West US",
       "metadata": {
         "description": "Select the location for the BotCore operational Data Factory"
       }
