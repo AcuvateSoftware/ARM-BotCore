@@ -30,11 +30,6 @@
         "description": "Select the type of the App Service plan"
       }
     },
-    "BotCore Runtime Web App": {
-      "type": "string",
-      "defaultValue": "ACU-BOT-ABS-DEV",
-      "metadata": { "description": "Name of BotCore runtime Web App. This will be used while creating the Azure Bot Service." }
-    },
     "BotCore Admin Service Web App": {
       "type": "string",
       "defaultValue": "ACU-BOT-APP-DEV",
@@ -314,23 +309,6 @@
           }
         }
       ]
-    },
-    {
-      "name": "[parameters('BotCore Runtime Web App')]",
-      "type": "Microsoft.Web/sites",
-      "location": "[resourceGroup().location]",
-      "apiVersion": "2015-08-01",
-      "dependsOn": [
-        "[resourceId('Microsoft.Web/serverfarms', parameters('BotCore App Service Plan'))]"
-      ],
-      "tags": {
-        "[concat('hidden-related:', resourceId('Microsoft.Web/serverfarms', parameters('BotCore App Service Plan')))]": "Resource",
-        "displayName": "Web App"
-      },
-      "properties": {
-        "name": "[parameters('BotCore Runtime Web App')]",
-        "serverFarmId": "[resourceId('Microsoft.Web/serverfarms', parameters('BotCore App Service Plan'))]"
-      }
     },
     {
       "name": "[parameters('BotCore Admin Service Web App')]",
