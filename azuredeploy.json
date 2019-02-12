@@ -2,9 +2,21 @@
   "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
   "contentVersion": "1.0.0.0",
   "parameters": {
+    "Subscription Id": {
+      "type": "string",
+      "metadata": {
+        "description": "Please enter the subscription id of your subscription."
+      }
+    },
+    "Resource Group Name": {
+      "type": "string",
+      "defaultValue": "ACU-BOT-RG-DEV",
+      "metadata": { "description": "Please re- enter the name of resource group here." }
+    },
     "BotCore App Service Plan": {
       "type": "string",
       "minLength": 1,
+      "defaultValue": "ACU-BOT-APP-DEV",
       "metadata": {
         "description": "Please enter the name of app service plan that will host the BotCore Runtime & Admin Service."
       }
@@ -87,6 +99,7 @@
     },
     "Redis Cache SKU Capacity": {
       "type": "int",
+      "defaultValue": "0",
       "allowedValues": [
         0,
         1,
@@ -200,6 +213,7 @@
     },
     "Data Factory Version": {
       "type": "string",
+      "defaultValue": "2015-10-01",
       "allowedValues": [
         "2015-10-01",
         "2015-09-01",
@@ -210,6 +224,81 @@
         "2014-04-01"
       ],
       "metadata": { "description": "Bot operational Data Factory version." }
+    },
+    "Function App": {
+      "type": "string",
+      "defaultValue": "ACU-BOT-AFA-DEV",
+      "metadata": { "description": "Please enter the name of the funtion app for BotCore actions" }
+    },
+    "Function app Location": {
+      "type": "string",
+      "defaultValue": "West US",
+      "allowedValues": [
+        "Australia East",
+        "Australia Southeast",
+        "Brazil South",
+        "Canada Central",
+        "Canada East",
+        "Central India",
+        "Central US",
+        "East Asia",
+        "East US",
+        "East US 2",
+        "France Central",
+        "Japan East",
+        "Japan West",
+        "North Central US",
+        "North Europe",
+        "South Central US",
+        "South India",
+        "Southeast Asia",
+        "UK South",
+        "UK West",
+        "West Central US",
+        "West Europe",
+        "West India",
+        "West US",
+        "West US 2"
+      ],
+      "metadata": { "description": "Please choose the prefered location of the function app." }
+    },
+    "Cognitive service Name": {
+      "type": "string",
+      "defaultValue": "ACU-BOT-CS-DEV",
+      "metadata": { "description": "Enter the preferred name for cognitive service." }
+    },
+    "Cognitive service Location": {
+      "type": "string",
+      "defaultValue": "West US",
+      "allowedValues": [
+        "East US",
+        "West US",
+        "West US 2",
+        "West Europe",
+        "North Europe",
+        "Australia East",
+        "Brazil South",
+        "Southeast Asia",
+        "East Asia"
+      ],
+      "metadata": { "description": "Please choose location for LUIS" }
+    },
+    "Cognitive Service Type": {
+      "type": "string",
+      "allowedValues": [
+        "LUIS"
+      ],
+      "defaultValue": "LUIS",
+      "metadata": { "description": "Leave as LUIS" }
+    },
+    "Cognitive service SKU": {
+      "type": "string",
+      "allowedValues": [
+        "F0",
+        "S0"
+      ],
+      "defaultValue": "S0",
+      "metadata": { "description": "Please choose SKU for LUIS" }
     }
   },
   "variables": {},
@@ -332,6 +421,54 @@
       "name": "[parameters('BotCore operational Data Factory')]",
       "location": "[parameters('Data Factory location')]",
       "type": "Microsoft.DataFactory/dataFactories",
+      "properties": {}
+    },
+    {
+      "apiVersion": "2016-03-01",
+      "name": "[parameters('Function App')]",
+      "type": "Microsoft.Web/sites",
+      "properties": {
+        "name": "[parameters('Function App')]",
+        "siteConfig": {
+          "appSettings": [
+            {
+              "name": "FUNCTIONS_WORKER_RUNTIME",
+              "value": "dotnet"
+            },
+            {
+              "name": "AzureWebJobsStorage",
+              "value": "[concat('DefaultEndpointsProtocol=https;AccountName=',parameters('Storage'),';AccountKey=',listKeys(resourceId('1de71431-4aac-472c-99dc-2cd74b12c452','ACUIT-REG-DEV','Microsoft.Storage/storageAccounts', parameters('Storage')), '2015-05-01-preview').key1)]"
+            },
+            {
+              "name": "FUNCTIONS_EXTENSION_VERSION",
+              "value": "~2"
+            },
+            {
+              "name": "WEBSITE_NODE_DEFAULT_VERSION",
+              "value": "8.11.1"
+            }
+          ],
+          "alwaysOn": true
+        },
+        "clientAffinityEnabled": false,
+        "serverFarmId": "[concat('/subscriptions/', parameters('Subscription Id'),'/resourcegroups/', parameters('Resource Group Name'), '/providers/Microsoft.Web/serverfarms/', parameters('BotCore App Service Plan'))]",
+        "dependsOn": [
+          "[resourceId('Microsoft.Web/serverfarms', parameters('BotCore App Service Plan'))]"
+        ]
+
+      },
+      "location": "[parameters('Function app Location')]",
+      "kind": "functionapp"
+    },
+    {
+      "apiVersion": "2017-04-18",
+      "name": "[parameters('Cognitive service Name')]",
+      "location": "[parameters('Cognitive service Location')]",
+      "type": "Microsoft.CognitiveServices/accounts",
+      "kind": "[parameters('Cognitive Service Type')]",
+      "sku": {
+        "name": "[parameters('Cognitive service SKU')]"
+      },
       "properties": {}
     },
     {
