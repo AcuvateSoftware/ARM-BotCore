@@ -1,4 +1,4 @@
-# BotCore-ARM-Main
+# ARM-BotCore
 ARM template for BotCore deployment. To be used by client teams for creating Azure resources for BotCore deployment.
 Provisions App service plan, Web app, SQL Server and Database, Storage account, Data Factory, Redis cache, Function App& Cognitive Service.
 
