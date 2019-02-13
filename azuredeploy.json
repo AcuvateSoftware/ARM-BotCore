@@ -5,7 +5,7 @@
     "Subscription Id": {
       "type": "string",
       "metadata": {
-        "description": "Please enter the Subscription Id of your subscription."
+        "description": "Please enter the subscription id of your subscription."
       }
     },
     "Resource Group Name": {
@@ -424,126 +424,6 @@
       "properties": {}
     },
     {
-      "apiVersion": "2016-03-01",
-      "name": "[parameters('Function App')]",
-      "type": "Microsoft.Web/sites",
-      "properties": {
-        "name": "[parameters('Function App')]",
-        "siteConfig": {
-          "appSettings": [
-            {
-              "name": "FUNCTIONS_WORKER_RUNTIME",
-              "value": "dotnet"
-            },
-            {
-              "name": "AzureWebJobsStorage",
-              "value": "[concat('DefaultEndpointsProtocol=https;AccountName=',parameters('Storage'),';AccountKey=',listKeys(resourceId(parameters('Subscription Id'),parameters('Resource Group Name'),'Microsoft.Storage/storageAccounts', parameters('Storage')), '2015-05-01-preview').key1)]"
-            },
-            {
-              "name": "FUNCTIONS_EXTENSION_VERSION",
-              "value": "~2"
-            },
-            {
-              "name": "WEBSITE_CONTENTAZUREFILECONNECTIONSTRING",
-              "value": "[concat('DefaultEndpointsProtocol=https;AccountName=',parameters('Storage'),';AccountKey=',listKeys(resourceId(parameters('Subscription Id'),parameters('Resource Group Name'),'Microsoft.Storage/storageAccounts', parameters('Storage')), '2015-05-01-preview').key1)]"
-            },
-            {
-              "name": "WEBSITE_CONTENTSHARE",
-              "value": "[concat(toLower(parameters('Storage')), '8875')]"
-            },
-            {
-              "name": "WEBSITE_NODE_DEFAULT_VERSION",
-              "value": "8.11.1"
-            }
-          ]
-        },
-        "clientAffinityEnabled": false,
-        "reserved": false
-      },
-      "location": "[parameters('Function app Location')]",
-      "kind": "functionapp"
-    },
-{
-      "apiVersion": "2016-03-01",
-      "name": "[parameters('Function App')]",
-      "type": "Microsoft.Web/sites",
-      "properties": {
-        "name": "[parameters('Function App')]",
-        "siteConfig": {
-          "appSettings": [
-            {
-              "name": "FUNCTIONS_WORKER_RUNTIME",
-              "value": "dotnet"
-            },
-            {
-              "name": "AzureWebJobsStorage",
-              "value": "[concat('DefaultEndpointsProtocol=https;AccountName=',parameters('Storage'),';AccountKey=',listKeys(resourceId(parameters('Subscription Id'),parameters('Resource Group Name'),'Microsoft.Storage/storageAccounts', parameters('Storage')), '2015-05-01-preview').key1)]"
-            },
-            {
-              "name": "FUNCTIONS_EXTENSION_VERSION",
-              "value": "~2"
-            },
-            {
-              "name": "WEBSITE_CONTENTAZUREFILECONNECTIONSTRING",
-              "value": "[concat('DefaultEndpointsProtocol=https;AccountName=',parameters('Storage'),';AccountKey=',listKeys(resourceId(parameters('Subscription Id'),parameters('Resource Group Name'),'Microsoft.Storage/storageAccounts', parameters('Storage')), '2015-05-01-preview').key1)]"
-            },
-            {
-              "name": "WEBSITE_CONTENTSHARE",
-              "value": "[concat(toLower(parameters('Storage')), '8875')]"
-            },
-            {
-              "name": "WEBSITE_NODE_DEFAULT_VERSION",
-              "value": "8.11.1"
-            }
-          ]
-        },
-        "clientAffinityEnabled": false,
-        "reserved": false
-      },
-      "location": "[parameters('Function app Location')]",
-      "kind": "functionapp"
-    },
-{
-      "apiVersion": "2016-03-01",
-      "name": "[parameters('Function App')]",
-      "type": "Microsoft.Web/sites",
-      "properties": {
-        "name": "[parameters('Function App')]",
-        "siteConfig": {
-          "appSettings": [
-            {
-              "name": "FUNCTIONS_WORKER_RUNTIME",
-              "value": "dotnet"
-            },
-            {
-              "name": "AzureWebJobsStorage",
-              "value": "[concat('DefaultEndpointsProtocol=https;AccountName=',parameters('Storage'),';AccountKey=',listKeys(resourceId(parameters('Subscription Id'),parameters('Resource Group Name'),'Microsoft.Storage/storageAccounts', parameters('Storage')), '2015-05-01-preview').key1)]"
-            },
-            {
-              "name": "FUNCTIONS_EXTENSION_VERSION",
-              "value": "~2"
-            },
-            {
-              "name": "WEBSITE_CONTENTAZUREFILECONNECTIONSTRING",
-              "value": "[concat('DefaultEndpointsProtocol=https;AccountName=',parameters('Storage'),';AccountKey=',listKeys(resourceId(parameters('Subscription Id'),parameters('Resource Group Name'),'Microsoft.Storage/storageAccounts', parameters('Storage')), '2015-05-01-preview').key1)]"
-            },
-            {
-              "name": "WEBSITE_CONTENTSHARE",
-              "value": "[concat(toLower(parameters('Storage')), '8875')]"
-            },
-            {
-              "name": "WEBSITE_NODE_DEFAULT_VERSION",
-              "value": "8.11.1"
-            }
-          ]
-        },
-        "clientAffinityEnabled": false,
-        "reserved": false
-      },
-      "location": "[parameters('Function app Location')]",
-      "kind": "functionapp"
-    },
-{
       "apiVersion": "2016-03-01",
       "name": "[parameters('Function App')]",
       "type": "Microsoft.Web/sites",
